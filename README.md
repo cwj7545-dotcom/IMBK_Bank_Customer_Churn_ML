@@ -205,6 +205,82 @@ for i, model in enumerate(top4_models):
 | CatBoost | 0.8577 | 0.8568 | 0.4685 | 0.7373 | 0.5726 | 전반적으로 매우 안정적인 수치 |
 | Decision Tree (DT) | 0.7791 | 0.6745 | 0.4979 | 0.4609 | 0.4784 | Recall(재현율)이 가장 높음 |
 
+
+
+### 모델 선택 이유
+
+성능 비교 결과 수치상으로는 4위를 기록했으나, 본 프로젝트의 최종 예측 모델로 Random Forest를 채택하였습니다. 그 이유는 다음과 같습니다.
+
+분석 프로세스의 일관성 및 숙련도: 이번 분석 과정 전반에서 Random Forest 모델을 지속적으로 활용하며 하이퍼파라미터 튜닝 및 성능 최적화 경험을 쌓았습니다. 모델의 특성을 깊이 이해하고 있는 만큼, 결과값에 대한 신뢰도를 높이고 예외 상황에 유연하게 대응하기 위해 해당 모델을 최종 선정했습니다.
+
+성능 차이의 유의성 검토: 1위 모델(GBC, 0.8607)과 Random Forest(0.8580)의 성능 차이는 약 0.3% 미만으로 매우 적습니다. 이러한 미세한 수치 차이보다는 모델의 안정성과 해석 가능성(Explainability)을 우선순위에 두었습니다.
+
+SHAP Value 분석과의 연계: Random Forest는 다수의 의사결정 나무를 결합한 모델로, 이후 진행할 SHAP Value 분석에서 변수 간의 상호작용을 직관적으로 파악하기에 매우 적합한 구조를 가지고 있습니다.
+
+| 항목 | 내용 | 비고|
+| ----- | ----- | ----- |
+| 최종 모델 | Random Forest Classifier | 앙상블 기반의 높은 안정성 보유 |
+| 선정 근거 1 | 분석 숙련도 및 일관성 | 프로젝트 전반에서 활용하며 모델 제어 및 튜닝 역량 확보
+| 선정 근거 2 | 성능 차이 미미 | 1위(GBC) 대비 정확도 차이가 0.3% 미만으로 유의미한 성능 유지 |
+| 선정 근거 3 | XAI(해석 가능성) 연계 | SHAP 분석을 통해 모델의 예측 근거를 시각화하기에 최적화된 구조 |
+
+# SHAP value
+
+## SHAP value 분석
+
+    explainer = shap.TreeExplainer(rf_model)
+    
+    shap_values = explainer.shap_values(X_test_sample)
+
+    print("X_test_sample shape:", X_test_sample.shape)
+
+    # shap_values 형태 확인
+
+    # shap values가 list인지 확인
+    
+    if isinstance(shap_values, list):
+        print("shap_values is list")
+        print("각 클래스 shap shape:", [sv.shape for sv in shap_values])
+        shap_to_plot = shap_values[1]   # churn=1 클래스
+        
+    else:
+        print("shap_values shape:", shap_values.shape)
+
+        # SHAP 결과가 3차원이면 chrun = 1 클래스만 꺼냅니다
+        
+        if len(shap_values.shape) == 3:
+            shap_to_plot = shap_values[:, :, 1]   
+        else:
+            shap_to_plot = shap_values
+
+    shap.summary_plot(shap_to_plot, X_test_sample)
+
+<img width="759" height="614" alt="image" src="https://github.com/user-attachments/assets/897a9ea5-64de-47f6-a2c5-417cd3cec0ef" />
+
+## 분석 결과
+
+사용변수
+
+| 변수명 | 분석 결과 및 비즈니스 인사이트 |
+| ----- | ----- |
+| Age (나이) | "가장 지배적인 변수입니다. 시각화 결과 나이가 많을수록(Red) SHAP Value가 양(+)의 방향으로 나타나 이탈 확률이 급격히 높아집니다. 반면, 젊은 층은 이탈 가능성이 상대적으로 낮아 안정적인 고객군임을 시사합니다." |
+| Products Number | "비선형적(Non-linear) 패턴이 관찰됩니다. 일반적으로 상품 수가 적을수록 이탈 위험이 크지만, 특정 임계값을 넘어 상품 수가 과도하게 많은 고객군에서도 이탈 위험이 급증하는 양상을 보입니다. 이는 상품 가입 유도뿐만 아니라 가입 후 관리가 중요함을 의미합니다." |
+| Active Member | 활동성 여부는 이탈과 강한 음(-)의 상관관계를 가집니다. 활동 회원(Red)일수록 SHAP Value가 좌측으로 형성되어 이탈 가능성을 크게 낮추는 핵심 방어 요인으로 작용합니다. |
+| Country (Germany) | "독일 국적 고객(Red)의 경우 타 국가 대비 SHAP Value가 우측에 집중되어 있습니다. 이는 독일 시장 고객의 이탈 성향이 유독 강함을 나타내며, 해당 지역의 경쟁 환경이나 서비스 만족도에 대한 로컬 분석이 필요함을 보여줍니다." |
+
+기타 변수 및 한계점 (Minor Features)
+
+| 변수명 | 분석 결과 및 비즈니스 인사이트 |
+| ----- | ----- |
+| Balance (잔고) | 잔고가 높을수록 이탈 위험이 소폭 상승하는 경향이 있으나, SHAP Value가 0 근처에 밀집되어 있어 영향력은 상위 변수들에 비해 제한적입니다. |
+| Gender & Others | 성별(Gender), 신용 점수(Credit Score), 추정 급여(Estimated Salary) 등은 SHAP Value가 0에 수렴하고 있습니다. 이는 해당 모델이 이탈 여부를 판단할 때 위 변수들을 주요 결정 근거로 삼지 않았음을 의미합니다. |
+
+
+
+### 인사이트
+
+
+
 ## 요약
 
 본 프로젝트는 은행 고객 이탈 예측을 주제로 Python 기반 데이터 분석 및 머신러닝 모델링 전 과정을 수행한 프로젝트입니다. Pandas와 NumPy를 활용해 데이터를 전처리하고, Seaborn과 Matplotlib을 통해 고객 특성별 이탈 패턴을 분석하여 주요 인사이트를 도출하였습니다. 이후 PyCaret을 활용해 다양한 분류 모델을 비교하여 상위 모델을 선정하고, Optuna 기반 하이퍼파라미터 튜닝을 통해 성능을 개선하였으며, Stacking Ensemble 기법으로 최종 모델의 예측력을 향상시켰습니다. 또한 SHAP을 활용하여 모델의 의사결정 과정을 해석하고 주요 변수의 영향력을 분석함으로써, 단순 예측을 넘어 실질적인 고객 유지 전략 수립에 기여할 수 있도록 설계하였습니다.
