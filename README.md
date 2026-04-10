@@ -1,6 +1,6 @@
 # IMBK_Bank_Customer_Churn_ML
 
-# 1. 프로젝트 명 : 고객이탈분류 ML 및 인사이트 분석
+## 1. 프로젝트 명 : 고객이탈분류 ML 및 인사이트 분석
 | 핵심 | 내용 |
 | ------ | ------ | 
 | 프로젝트 명 | 고객이탈분류 ML 및 인사이트 분석 |
@@ -55,7 +55,7 @@ print(df.isnull().sum())
 
 print(df.info())
 
-7. 학습/검증 데이터 분리 (Stratified Split)
+5. 학습/검증 데이터 분리 (Stratified Split)
    
 train_df, valid_df = train_test_split(
     df,
@@ -65,8 +65,16 @@ train_df, valid_df = train_test_split(
 )
 
 
-# 4. EDA 및 해석
+## 4. EDA 및 해석
 
+# 결측치 확인
 
+<img width="183" height="259" alt="image" src="https://github.com/user-attachments/assets/568fd250-490c-4403-a555-11472f169943" />
+
+- 이상 없었습니다
+
+<img width="984" height="584" alt="image" src="https://github.com/user-attachments/assets/8eba45b3-e5a3-4a2e-938b-ff71afbac19e" />
+
+- 먼저, Churnd 에서
 
 본 프로젝트는 은행 고객 이탈 예측을 주제로 Python 기반 데이터 분석 및 머신러닝 모델링 전 과정을 수행한 프로젝트입니다. Pandas와 NumPy를 활용해 데이터를 전처리하고, Seaborn과 Matplotlib을 통해 고객 특성별 이탈 패턴을 분석하여 주요 인사이트를 도출하였습니다. 이후 PyCaret을 활용해 다양한 분류 모델을 비교하여 상위 모델을 선정하고, Optuna 기반 하이퍼파라미터 튜닝을 통해 성능을 개선하였으며, Stacking Ensemble 기법으로 최종 모델의 예측력을 향상시켰습니다. 또한 SHAP을 활용하여 모델의 의사결정 과정을 해석하고 주요 변수의 영향력을 분석함으로써, 단순 예측을 넘어 실질적인 고객 유지 전략 수립에 기여할 수 있도록 설계하였습니다.
