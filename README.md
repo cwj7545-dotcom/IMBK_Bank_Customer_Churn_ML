@@ -277,9 +277,52 @@ SHAP Value 분석과의 연계: Random Forest는 다수의 의사결정 나무�
 
 
 
-### 인사이트
+# 최종 인사이트
 
+## 데이터 기반 최종 비즈니스 전략 제안 (Actionable Insights)
 
+본 프로젝트를 통해 도출된 핵심 지표를 바탕으로, 고객 이탈 방지를 위한 3대 집중 관리 전략을 제안합니다.
+
+1. [High-Risk] 중장년층 고객 타겟 맞춤형 유지 전략
+   
+현황: SHAP 분석 결과 Age가 이탈의 가장 큰 원인이며, 특히 독일 지역의 50~55세 구간 고객은 약 70%의 매우 높은 이탈률을 보입니다.
+
+전략: 자산 관리 프로그램 강화: 은퇴 준비 시점인 해당 연령대의 특성에 맞춰 연금 상품이나 안정적인 자산 운용 컨설팅 서비스를 제공하여 락인(Lock-in) 효과를 유도합니다.
+
+로열티 프로그램 도입: 장기 거래 고객이 많은 연령대인 만큼, 거래 기간(Tenure)에 따른 우대 금리나 수수료 감면 혜택을 강화합니다.
+
+2. [Product] 상품 가입 포트폴리오 최적화
+   
+현황: Products Number 분석 결과, 상품이 너무 적거나 반대로 너무 과도한 고객층에서 비선형적인 이탈 패턴이 발견되었습니다.
+
+전략: Cross-selling 가이드라인 수립: 단순히 상품 수를 늘리는 것이 아니라, 고객의 라이프사이클에 맞는 '핵심 상품 조합(예: 급여계좌 + 적금 + 신용카드)'을 설계하여 제안합니다.
+
+다상품 가입자 특별 케어: 상품을 많이 보유한 고객은 서비스 복잡도에 지칠 수 있으므로, 통합 관리 UI 제공이나 전담 상담 서비스를 통해 관리 편의성을 증대시킵니다.
+
+# REFERENCE
+
+Data Source
+
+Kaggle: Bank Customer Churn Prediction Dataset
+
+Tools & Libraries
+Language: Python (3.10.20)
+
+Data Analysis: Pandas, NumPy
+
+Visualization: Matplotlib, Seaborn
+
+Machine Learning: PyCaret (AutoML), Scikit-learn
+
+XAI: SHAP (SHapley Additive exPlanations)
+
+Methodology & Documentation
+
+Model Interpretation: SHAP Official Documentation
+
+AutoML Framework: PyCaret Documentation
+
+Theory: Lundberg, Scott M., and Su-In Lee. "A unified approach to interpreting model predictions." Advances in neural information processing systems 30 (2017).
 
 ## 요약
 
