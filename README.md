@@ -10,9 +10,13 @@
 # 2. 기술 스택
 
 Programming Language: Python
+
 Data Processing: Pandas, NumPy
+
 Data Visualization: Matplotlib, Seaborn
+
 Machine Learning: Scikit-learn, PyCaret
+
 Hyperparameter Optimization: Optuna
 
 
