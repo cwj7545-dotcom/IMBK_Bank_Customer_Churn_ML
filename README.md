@@ -27,28 +27,36 @@ Hyperparameter Optimization: Optuna
 
 [ 사용된 코드 ]
 
-"import pandas as pd
+import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder"
+from sklearn.preprocessing import LabelEncoder
 
 1. 데이터 로드
+   
 df = pd.read_csv('Bank Customer Churn Prediction.csv')
 
-2. 불필요한 컬럼 제거
+3. 불필요한 컬럼 제거
+   
 df = df.drop(columns=['customer_id'], errors='ignore')
 
-3. 범주형 변수 인코딩
+4. 범주형 변수 인코딩
+   
 le_country = LabelEncoder()
+
 le_gender = LabelEncoder()
 
 df['country'] = le_country.fit_transform(df['country'])
+
 df['gender'] = le_gender.fit_transform(df['gender'])
 
 4. 결측치 및 데이터 구조 확인
+   
 print(df.isnull().sum())
+
 print(df.info())
 
-5. 학습/검증 데이터 분리 (Stratified Split)
+7. 학습/검증 데이터 분리 (Stratified Split)
+   
 train_df, valid_df = train_test_split(
     df,
     test_size=0.2,
