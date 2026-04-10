@@ -27,9 +27,9 @@ Hyperparameter Optimization: Optuna
 
 [ 사용된 코드 ]
 
-import pandas as pd
+"import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder"
 
 1. 데이터 로드
 df = pd.read_csv('Bank Customer Churn Prediction.csv')
